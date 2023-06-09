@@ -1,0 +1,38 @@
+class Solution {
+public:
+    vector<int> maxSlidingWindow(vector<int>& nums, int k) {
+        vector<int> ans;
+        int n=nums.size();
+        deque<int> dq;
+        //first k elements
+        for(int i=0;i<k;i++){
+            if(dq.empty()){
+                dq.push_back(i);
+            }
+            else{
+                while(!dq.empty() && nums[dq.back()]<nums[i]){
+                    dq.pop_back();
+                }
+                dq.push_back(i);
+            }
+        }
+        ans.push_back(nums[dq.front()]);
+        //remaining parts ko alag se treat krnege kyuki yaha elements ko ek ek step se check krenge
+        for(int i=k;i<n;i++){
+            if(dq.front()==i-k){
+                dq.pop_front();
+            }
+            if(dq.empty()){
+                dq.push_back(i);
+            }
+            else{
+                while(!dq.empty() && nums[dq.back()]<nums[i]){
+                    dq.pop_back();
+                }
+                dq.push_back(i);
+            }
+            ans.push_back(nums[dq.front()]);
+        }
+        return ans;
+    }
+};
