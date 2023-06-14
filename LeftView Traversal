@@ -1,0 +1,18 @@
+void f(Node *root,vector<int>& leftview,int level){
+    if(!root){
+        return;
+    }
+    if(leftview.size()==level){
+        leftview.push_back(root->data);
+    }
+    f(root->left,leftview,level+1);
+    f(root->right,leftview,level+1);
+} 
+ 
+vector<int> leftView(Node *root)
+{
+   vector<int> leftview;
+   int level=0;
+   f(root,leftview,level);
+   return leftview;
+}
