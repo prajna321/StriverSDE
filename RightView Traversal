@@ -1,0 +1,21 @@
+class Solution
+{
+    void f(Node *root,vector<int>& rightView,int level){
+        if(!root){
+            return;
+        }
+        if(rightView.size()==level){
+            rightView.push_back(root->data);
+        }
+        f(root->right,rightView,level+1);
+        f(root->left,rightView,level+1);
+    }
+    public:
+    vector<int> rightView(Node *root)
+    {
+       vector<int> rightView;
+       int level=0;
+       f(root,rightView,level);
+       return rightView;
+    }
+};
