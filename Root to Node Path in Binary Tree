@@ -1,0 +1,33 @@
+bool getPath(vector<int>& arr,TreeNode<int> *root, int x){
+	if(!root){
+		return false;
+	}
+	if(root->data==x){
+		arr.push_back(root->data);
+		return true;
+	}
+	arr.push_back(root->data);
+	bool flg1=false;
+	bool flg2=false;
+	if(root->left){
+		flg1=getPath(arr,root->left,x);
+	}
+	if(root->right){
+		flg2=getPath(arr,root->right,x);
+	}
+	if (!flg1 && !flg2)
+    {
+        arr.pop_back();
+    }
+	return flg1||flg2;
+}
+
+vector<int> pathInATree(TreeNode<int> *root, int x)
+{
+    vector<int> arr;
+	if(!root){
+		return arr;
+	}
+	getPath(arr,root,x);
+	return arr;
+}
