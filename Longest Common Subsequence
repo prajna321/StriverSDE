@@ -1,4 +1,6 @@
 //////////memo
+TC:O(N*M)
+SC:O(N*M)//dp+O(N+M)//recursive stack
 class Solution {
 public:
     int solve(string text1, string text2,int i,int j,vector<vector<int>>& dp){
@@ -30,6 +32,8 @@ public:
 };
 
 ////////////tabulation
+TC:O(N*M)
+SC:O(N*M)//dp
 class Solution {
 public:
     int longestCommonSubsequence(string text1, string text2) {
