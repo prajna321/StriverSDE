@@ -1,34 +1,36 @@
 ///TC: exponential
 SC:O(N+M)
-
-class Solution {
-public:
-    int f(string &word1, string &word2,int i ,int j){
-        if(i<0){
-            //insert
-            return j+1;
+class Solution { 
+public: 
+    int f(string word1, string word2,int i,int j){ 
+        if(i<0){ 
+            //insert 
+            return j+1; 
+        } 
+        if(j<0){ 
+            //delete 
+            return i+1; 
+        } 
+        int ans=INT_MAX; 
+        if(word1[i]==word2[j]){ 
+            ans=f(word1,word2,i-1,j-1); 
+        } 
+        else{
+            int op1=1+f(word1,word2,i-1,j-1); 
+            int op2=1+f(word1,word2,i,j-1); 
+            int op3=1+f(word1,word2,i-1,j); 
+            int ans1=min({op1,op2,op3}); 
+            ans=min(ans,ans1); 
         }
-        if(j<0){
-            //delete
-            return i+1;
-        }
-        if(word1[i]==word2[j]){
-            return f(word1,word2,i-1,j-1);
-        }
-        //replace
-        int op1=1+f(word1,word2,i-1,j-1);
-        //insert
-        int op2=1+f(word1,word2,i,j-1);
-        //delete
-        int op3=1+f(word1,word2,i-1,j);
-        return min(op1,min(op2,op3));
-    }
-
-    int minDistance(string word1, string word2) {
-        int i=word1.size()-1;
-        int j=word2.size()-1;
-        return f(word1,word2,i,j);
-    }
+        return ans; 
+    } 
+ 
+    int minDistance(string word1, string word2) { 
+        int n=word1.size(); 
+        int m=word2.size(); 
+        int i=n-1,j=m-1; 
+        return f(word1,word2,i,j); 
+    } 
 };
 
 ////////memo
