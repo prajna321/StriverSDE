@@ -1,0 +1,72 @@
+//////////recursion
+class Solution {
+public:
+    int f(int index, vector<int>& coins, int amount) {
+        if (amount <= 0 || index < 0) {
+            if(amount==0){
+                return 0;
+            }
+            return INT_MAX-1;
+        }
+        int ans=-1;
+        if(coins[index]>amount){
+            int notpick=f(index-1,coins,amount);
+            ans=notpick;
+        }
+        else{
+            int pick=1+f(index,coins,amount-coins[index]);
+            int notpick=f(index-1,coins,amount);
+            ans=min(pick,notpick);
+        }
+        return ans;
+    }
+
+    int coinChange(vector<int>& coins, int amount) {
+        int n=coins.size();
+        int index = coins.size() - 1;
+        int x=f(index, coins, amount);
+        if(x==INT_MAX-1){
+            return -1;
+        }
+        return x;
+    }
+};
+
+////////memo
+class Solution {
+public:
+    int f(int index, vector<int>& coins, int amount,vector<vector<int>>& dp) {
+        if (amount <= 0 || index < 0) {
+            if(amount==0){
+                return 0;
+            }
+            return INT_MAX-1;
+        }
+        if(dp[index][amount]!=-1){
+            return dp[index][amount];
+        }
+        int ans=-1;
+        if(coins[index]>amount){
+            int notpick=f(index-1,coins,amount,dp);
+            ans=notpick;
+        }
+        else{
+            int pick=1+f(index,coins,amount-coins[index],dp);
+            int notpick=f(index-1,coins,amount,dp);
+            ans=min(pick,notpick);
+        }
+        return dp[index][amount]=ans;
+    }
+
+    int coinChange(vector<int>& coins, int amount) {
+        int n=coins.size();
+        int index = coins.size() - 1;
+        vector<vector<int>> dp(n,vector<int>(10001,-1));
+        int x=f(index, coins, amount,dp);
+        if(x==INT_MAX-1){
+            return -1;
+        }
+        return x;
+    }
+};
+
