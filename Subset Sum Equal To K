@@ -1,0 +1,49 @@
+//memo
+#include <bits/stdc++.h> 
+using namespace std;
+
+bool f(int index,int n, int k, vector<int> &arr,vector<vector<int>>& dp){
+    if(k==0){
+        return true;
+    }
+    if(index==0){
+        return k==arr[0];
+    }
+    if(dp[index][k]!=-1){
+        return dp[index][k];
+    }
+    bool notpick=f(index-1,n,k,arr,dp);
+    bool pick=false;
+    if(arr[index]<=k){
+        pick=f(index-1,n,k-arr[index],arr,dp);
+    }
+    return dp[index][k]=pick||notpick;
+}
+
+bool subsetSumToK(int n, int k, vector<int> &arr) {
+    int index=n-1;
+    vector<vector<int>> dp(n,vector<int>(10001,-1));
+    return f(index,n,k,arr,dp);
+}
+///tabu
+bool subsetSumToK(int n, int k, vector<int> &arr) {
+    vector<vector<bool>> dp(n+1,vector<bool>(k+1,0));
+    for(int index=0;index<=n;index++){
+        dp[index][0]=true;
+    }
+    if (arr[0] <= k) {
+        dp[0][arr[0]] = true;
+    }
+
+    for(int index=1;index<=n;index++){
+        for(int tar=1;tar<=k;tar++){
+            bool notpick=dp[index-1][tar];
+            bool pick=false;
+            if(arr[index]<=tar){
+                pick=dp[index-1][tar-arr[index]];
+            }
+            dp[index][tar]=pick||notpick;
+        }
+    }
+    return dp[n-1][k];
+}
