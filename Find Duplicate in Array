@@ -1,0 +1,29 @@
+//method 1 
+O(n)
+#include <bits/stdc++.h>
+
+int findDuplicate(vector<int> &arr, int n){
+	int ans=-1;
+	for(int i=0;i<n;i++){
+		int num=abs(arr[i]);
+		if(arr[num]>0){
+			arr[num]*=-1;
+		}
+		else{
+			ans=num;
+			break;
+		}
+	}
+	return ans;
+}
+
+//method 2
+O(1)
+#include <bits/stdc++.h>
+
+int findDuplicate(vector<int> &arr, int n){
+	while(arr[0]!=arr[arr[0]]){
+		swap(arr[0],arr[arr[0]]);
+	}
+	return arr[0];
+}
