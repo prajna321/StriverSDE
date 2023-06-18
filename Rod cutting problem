@@ -1,0 +1,24 @@
+//memo
+int f(int index,vector<int> &price, int n,vector<vector<int>>&dp){
+	if (index == 0) {
+		return n * price[0];
+	}
+	if(dp[index][n]!=-1){
+		return dp[index][n];
+	}
+	int pick=INT_MIN;
+	int curr_len=index+1;
+	if(curr_len<=n){
+		pick=price[index]+f(index,price,n-curr_len,dp);
+	}
+	int notpick=f(index-1,price,n,dp);
+	return dp[index][n]=max(pick,notpick);
+}
+
+int cutRod(vector<int> &price, int n)
+{
+	int index=price.size()-1;
+	vector<vector<int>>dp(n+1,vector<int>(n+1,-1));
+	return f(index,price,n,dp);
+}
+//tabu
