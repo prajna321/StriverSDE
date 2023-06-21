@@ -1,0 +1,79 @@
+/*
+brute
+TC:O(N)+O(N)
+SC:O(N)
+*/
+
+class Solution {
+public:
+    Node* copyRandomList(Node* head) {
+        unordered_map<Node*,Node*> mp;
+        Node* temp=head;
+        while(temp){
+            Node* node=new Node(temp->val);
+            mp[temp]=node;
+            temp=temp->next;
+        }
+        Node* t=head;
+        while(t){
+            Node* n=mp[t];
+            n->next=mp[t->next];
+            n->random=mp[t->random];
+            t=t->next;
+        }
+        return mp[head];
+    }
+};
+
+/*
+// Definition for a Node.
+class Node {
+public:
+    int val;
+    Node* next;
+    Node* random;
+    
+    Node(int _val) {
+        val = _val;
+        next = NULL;
+        random = NULL;
+    }
+};
+*/
+
+/*TC=0(N)+O(N)+O(N)
+     node create, assign random pointer, segregate the 2 LLs
+SC:O(N)
+*/
+
+class Solution {
+public:
+    Node* copyRandomList(Node* head) {
+        Node* iter=head;
+        Node* front=head;
+        while(iter){
+            front=iter->next;
+            Node* copy=new Node(iter->val);
+            iter->next=copy;
+            copy->next=front;
+            iter=front;
+        }
+        iter=head;
+        while(iter){
+            if(iter->random)
+                iter->next->random=iter->random->next;
+            iter=iter->next->next;
+        }
+        iter=head;
+        Node* newhead=new Node(-1);
+        Node* copy=newhead;
+        while(iter){
+            Node* front=iter->next->next;
+            copy->next=iter->next;
+            iter->next=front;
+            copy=copy->next;
+            iter=iter->next;
+        }
+        return newhead->next;
+    }
+};
