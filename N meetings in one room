@@ -1,0 +1,33 @@
+#include <bits/stdc++.h>
+using namespace std;
+bool comp(pair<int,pair<int,int>> p1,pair<int,pair<int,int>> p2){
+    if(p1.first<p2.first){
+        return true;
+    }
+    else if(p1.first>p2.first){
+        return false;
+    }
+    else if(p1.second.second<p2.second.second){
+        return true;
+    }
+    return false;
+}
+
+vector<int> maximumMeetings(vector<int> &start, vector<int> &end) {
+    vector<int> ans;
+    vector<pair<int,pair<int,int>>> v;
+    int n=start.size();
+    for(int i=0;i<n;i++){
+        v.push_back({end[i],{start[i],i+1}});
+    }
+    sort(v.begin(),v.end(),comp);
+    ans.push_back(v[0].second.second);
+    int limit=v[0].first;
+    for(int i=1;i<n;i++){
+        if(v[i].second.first>limit){
+            ans.push_back(v[i].second.second);
+            limit=v[i].first;
+        }
+    }
+    return ans;
+}
