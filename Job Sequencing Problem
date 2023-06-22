@@ -17,6 +17,7 @@ class Solution
         for(int i=0;i<n;i++){
             int d=arr[i].dead;
             for(int j=d;j>0;j--){
+                //j>0 to maintain 1 based indexing otherwise do d-1 to >=0
                 if(res[j]==-1){
                     res[j]=arr[i].id;
                     cnt++;
