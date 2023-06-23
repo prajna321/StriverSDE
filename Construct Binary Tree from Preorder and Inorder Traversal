@@ -1,0 +1,36 @@
+class Solution {
+public:
+    TreeNode* f(vector<int>& preorder, int preS, int preE, vector<int>& inorder, int inS, int inE) {
+        if (preS > preE || inS > inE) {
+            return NULL;
+        }
+        
+        TreeNode* node = new TreeNode(preorder[preS]);
+        
+        int posin = -1;
+        for (int i = inS; i <= inE; i++) {
+            if (inorder[i] == preorder[preS]) {
+                posin = i;
+                break;
+            }
+        }
+        
+        int leftSubtreeSize = posin - inS;
+        
+        node->left = f(preorder, preS + 1, preS + leftSubtreeSize, inorder, inS, posin - 1);
+        node->right = f(preorder, preS + leftSubtreeSize + 1, preE, inorder, posin + 1, inE);
+        
+        return node;
+    }
+
+    TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
+        if (preorder.empty() || inorder.empty()) {
+            return NULL;
+        }
+        
+        int preS = 0, preE = preorder.size() - 1;
+        int inS = 0, inE = inorder.size() - 1;
+        
+        return f(preorder, preS, preE, inorder, inS, inE);
+    }
+};
