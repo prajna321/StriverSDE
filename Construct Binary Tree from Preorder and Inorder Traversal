@@ -34,3 +34,29 @@ public:
         return f(preorder, preS, preE, inorder, inS, inE);
     }
 };
+//////////////new way
+TreeNode<int>* f(vector<int> &inorder,int inS,int inE,vector<int> &preorder,int preS,int preE){
+    if(inS>inE || preS>preE){
+        return NULL;
+    }
+    TreeNode<int>* node=new TreeNode<int>(preorder[preS]);
+    int posin=-1;
+    for(int i=0;i<inorder.size();i++){
+        if(inorder[i]==preorder[preS]){
+            posin=i;
+            break;
+        }
+    }
+    int numsLeft=posin-inS;
+    node->left=f(inorder,inS,posin-1,preorder,preS+1,preS+numsLeft);
+    node->right=f(inorder,posin+1,inE,preorder,preS+numsLeft+1,preE);
+    return node;
+}
+
+TreeNode<int> *buildBinaryTree(vector<int> &inorder, vector<int> &preorder)
+{
+	if(inorder.size()!=preorder.size()){
+        return NULL;
+    }
+    return f(inorder,0,inorder.size()-1,preorder,0,preorder.size()-1);
+}
