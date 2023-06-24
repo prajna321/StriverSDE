@@ -1,0 +1,57 @@
+TC: We are first sorting the array which will take O(N * log(N)) time and then we are running a for loop which will take O(N) time. 
+Hence, the overall time complexity will be O(N * log(N)).
+SC:O(1)
+
+class Solution {
+public:
+    int longestConsecutive(vector<int>& nums) {
+        if(nums.size()==0){
+            return 0;
+        }
+        int ans=1,cnt=1;
+        sort(nums.begin(),nums.end());
+        int prev=nums[0];
+        for(int i=1;i<nums.size();i++){
+            if(nums[i]==prev){
+                continue;
+            }
+            if(nums[i]==prev+1){
+                cnt++;
+                
+            }
+            else{
+                cnt=1;
+            }
+            prev=nums[i];
+            ans=max(ans,cnt);
+        }
+        return ans;
+    }
+};
+
+class Solution {
+public:
+    int longestConsecutive(vector<int>& nums) {
+        int n=nums.size();
+        if(n==0 || n==1){
+            return n;
+        }
+        unordered_set<int> st;
+        for(auto x:nums){
+            st.insert(x);
+        }
+        int ans=1,cnt=1;
+        for(auto it:st){
+            if(st.find(it-1)==st.end()){
+                cnt=1;
+                int x=it;
+                while(st.find(x+1)!=st.end()){
+                    cnt++;
+                    x=x+1;
+                }
+                ans=max(cnt,ans);
+            }
+        }
+        return ans;
+    }
+};
