@@ -28,7 +28,8 @@ public:
         return ans;
     }
 };
-
+Time Complexity: The time complexity of the above approach is O(N) because we traverse each consecutive subsequence only once. (assuming HashSet takes O(1) to search)
+Space Complexity: The space complexity of the above approach is O(N) because we are maintaining a HashSet.
 class Solution {
 public:
     int longestConsecutive(vector<int>& nums) {
