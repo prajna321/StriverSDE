@@ -1,0 +1,39 @@
+//subarray go kadane
+TC:O(n2)
+#include <bits/stdc++.h>
+
+int subarraysXor(vector<int> &arr, int x)
+{
+    int cnt=0;
+    int n=arr.size();
+    for(int i=0;i<n;i++){
+        int xr=0;
+        for(int j=i;j<n;j++){
+            xr^=arr[j];
+            if(xr==x){
+                cnt++;
+            }
+        }
+    }
+    return cnt;
+}
+
+//TC:O(N)
+#include <bits/stdc++.h>
+
+int subarraysXor(vector<int> &arr, int x)
+{
+    int ans=0,xorSum=0;
+    unordered_map<int,int> mp; //mp[xorSum]=count
+    for(int i=0;i<arr.size();i++){
+        xorSum ^= arr[i];
+        if(xorSum==x){
+            ans++;
+        }
+        if(mp.find(xorSum^x)!=mp.end()){
+            ans+=mp[xorSum^x];
+        }
+        mp[xorSum]++;
+    }
+    return ans;
+}
