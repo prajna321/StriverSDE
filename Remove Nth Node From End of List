@@ -1,0 +1,72 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+//TC:O(N)+o(N)=O(2N)
+SC:O(1)
+class Solution {
+public:
+    int getLen(ListNode* head){
+        if(!head){
+            return 0;
+        }
+        return getLen(head->next)+1;
+    }
+    ListNode* removeNthFromEnd(ListNode* head, int n) {
+        int len=getLen(head);
+        if(n>len){
+            return head;
+        }
+        if(n==len){
+            return head->next;
+        }
+        int toreach=len-n-1;
+        ListNode* curr=head;
+        while(toreach--){
+            curr=curr->next;
+        }
+        if(curr->next)
+            curr->next= curr->next->next;
+        return head;
+    }
+};
+
+//optimised
+Time Complexity: O(N)
+
+Space Complexity: O(1)
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* removeNthFromEnd(ListNode* head, int n) {
+        ListNode* fast=head; 
+        ListNode* slow=head;
+        while(fast && n--){
+            fast=fast->next;
+        } 
+        if(!fast){
+            return head->next;
+        }
+        while(fast->next!=NULL){
+            fast=fast->next;
+            slow=slow->next;
+        }
+        slow->next=slow->next->next;
+        return head;
+    }
+};
