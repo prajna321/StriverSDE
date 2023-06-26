@@ -1,0 +1,118 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    bool hasCycle(ListNode *head) {
+        if(!head || !head->next){
+            return false;
+        }
+        set<ListNode *> st;
+        ListNode *curr=head;
+        while(curr){
+            if(st.find(curr)!=st.end()){
+                return true;
+            }
+            st.insert(curr);
+            curr=curr->next;
+        }
+        return false;
+    }
+};
+
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+//Flyod cycle detection
+class Solution {
+public:
+    bool hasCycle(ListNode *head) {
+        if(head==NULL || head->next==NULL){
+            return false;
+        }
+        ListNode *fast=head;
+        ListNode *slow=head;
+        while(fast && slow){
+            fast=fast->next;
+            if(fast){
+                fast=fast->next;
+            }
+            slow=slow->next;
+            if(fast==slow){
+                return true;
+            }
+        }
+        return false;
+    }
+};
+
+//find the starting node of loop
+Node* getStartingNode(Node* head) {
+
+    if(head == NULL) 
+        return NULL;
+
+    Node* intersection = floydDetectLoop(head);
+    
+    if(intersection == NULL)
+        return NULL;
+    
+    Node* slow = head;
+
+    while(slow != intersection) {
+        slow = slow -> next;
+        intersection = intersection -> next;
+    }  
+
+    return slow;
+
+}
+Node *removeLoop(Node *head)
+{
+    if( head == NULL)
+        return NULL;
+
+    Node* startOfLoop = getStartingNode(head);
+    
+    if(startOfLoop == NULL)
+        return head;
+    
+    Node* temp = startOfLoop;
+
+    while(temp -> next != startOfLoop) {
+        temp = temp -> next;
+    } 
+
+    temp -> next = NULL;
+    return head;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
