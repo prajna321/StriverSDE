@@ -1,0 +1,60 @@
+TC:O(n*m)
+vector<int> stringMatch(string text, string pattern) {
+	int n=pattern.size();
+	int i=0,j=0;
+	while(j<n-1){
+		j++;
+	}
+	vector<int> ans;
+	while(j<text.size()){
+		if(text.substr(i,n)==pattern){
+			ans.push_back(i+1);
+		}
+		i++;
+		j++;
+	}
+	return ans;
+}
+
+//TC:O(N-M+1) Rabn-Karp method
+//1 line me problem he bass
+//53rd line t = (d * (t - text[i] * hash) + text[i + m]) % q;
+
+#define d 256
+#define q 101
+
+vector<int> stringMatch(string text, string pattern) {
+    vector<int> ans;
+    int n = text.size();
+    int m = pattern.size();
+    int hash = 1;
+    for (int i = 0; i < m - 1; i++) {
+        hash = (hash * d) % q;
+    }
+    int p = 0, t = 0;
+    for (int i = 0; i < m; i++) {
+        p = (p * d + pattern[i]) % q;
+        t = (t * d + text[i]) % q;
+    }
+    for (int i = 0; i <= n - m; i++) {
+        if (p == t) {
+            bool match = true;
+            for (int j = 0; j < m; j++) {
+                if (text[i + j] != pattern[j]) {
+                    match = false;
+                    break;
+                }
+            }
+            if (match) {
+                ans.push_back(i+1);
+            }
+        }
+        if (i < n - m) {
+            t = (d * (t - text[i] * hash) + text[i + m]) % q;
+            if (t < 0) {
+                t += q;
+            }
+        }
+    }
+    return ans;
+}
