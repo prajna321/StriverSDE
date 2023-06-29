@@ -1,0 +1,24 @@
+
+Time Complexity: O(2N)
+Auxiliary Space: O(2N)
+
+class Solution
+{
+public:
+    void f(vector<int>& ans,int index,int sum,vector<int>& arr, int N){
+        if(index<0){
+            ans.push_back(sum);
+            return;
+        }
+        f(ans,index-1,sum+arr[index],arr,N);
+        f(ans,index-1,sum,arr,N);
+    }
+
+    vector<int> subsetSums(vector<int> arr, int N)
+    {
+        vector<int> ans;
+        int index=N-1,sum=0;
+        f(ans,index,sum,arr,N);
+        return ans;
+    }
+};
