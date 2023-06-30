@@ -1,0 +1,35 @@
+TC:O(2^n * k)
+SC:O(k*x)
+
+class Solution {
+public:
+    void f(vector<int>& arr, int target,int index,vector<vector<int>>& ans,vector<int>& temp){
+        if(target==0){
+            ans.push_back(temp);
+            return;
+        }
+        for(int i=index;i<arr.size();i++){
+            //imp
+            if(i!=index && arr[i]==arr[i-1]){
+                continue;
+            }
+            //imp
+            if(arr[i]>target){
+                break;
+            }
+            temp.push_back(arr[i]);
+            f(arr,target-arr[i],i+1,ans,temp);
+            temp.pop_back();
+//imp: no not take line
+        }
+    }
+
+    vector<vector<int>> combinationSum2(vector<int>& arr, int target) {
+        sort(arr.begin(),arr.end());
+        int index=0;
+        vector<vector<int>> ans;
+        vector<int> temp;
+        f(arr,target,index,ans,temp);
+        return ans;
+    }
+};
