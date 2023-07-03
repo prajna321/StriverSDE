@@ -1,0 +1,73 @@
+//{ Driver Code Starts
+#include <bits/stdc++.h>
+using namespace std;
+
+
+// } Driver Code Ends
+class Solution{
+public:
+    // Function to determine if graph can be coloured with at most M colours such
+    // that no two adjacent vertices of graph are coloured with same colour.
+    
+    bool isPos(int i,int clr,vector<int>& color,bool graph[101][101], int m, int n,int V){
+        //koi neighbour same clr ka he kya
+        for(int k=0;k<V;k++){
+            if(graph[i][k]==1 && color[k]==clr){
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    bool solve(vector<int>& color,bool graph[101][101], int m, int n,int i,int V){
+        if(i==V){
+            return true;
+        }
+        for(int clr=0;clr<m;clr++){
+            if(isPos(i,clr,color,graph,m,n,V)){
+                color[i]=clr;
+                if(solve(color,graph,m,n,i+1,V)){
+                    return true;
+                }
+                else{
+                    color[i]=-1;
+                }
+            }
+        }
+        return false;
+    }
+    
+    bool graphColoring(bool graph[101][101], int m, int n) {
+        int V=101;
+        vector<int> color(V,-1);
+        int i=0;
+        return solve(color,graph,m,n,i,V);
+    }
+};
+
+//{ Driver Code Starts.
+
+int main() {
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, m, e;
+        cin >> n >> m >> e;
+        int i;
+        bool graph[101][101];
+        for (i = 0; i < n; i++) {
+            memset(graph[i], 0, sizeof(graph[i]));
+        }
+        for (i = 0; i < e; i++) {
+            int a, b;
+            cin >> a >> b;
+            graph[a - 1][b - 1] = 1;
+            graph[b - 1][a - 1] = 1;
+        }
+        Solution ob;
+        cout << ob.graphColoring(graph, m, n) << endl;
+    }
+    return 0;
+}
+
+// } Driver Code Ends
