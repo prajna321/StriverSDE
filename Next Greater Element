@@ -1,0 +1,22 @@
+#include <bits/stdc++.h> 
+
+vector<int> nextGreater(vector<int> &arr, int n) {
+    vector<int> ans(n,-1);
+    stack<int> st;
+    for(int i=n-1;i>=0;i--){
+        if(st.empty()){
+            st.push(arr[i]);
+        }
+        else{
+            int ch=arr[i];
+            while(!st.empty() && st.top()<=ch){
+                st.pop();
+            }
+            if(!st.empty()){
+                ans[i]=st.top();
+            }
+            st.push(ch);
+        }
+    }
+    return ans;
+}
