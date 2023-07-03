@@ -1,0 +1,44 @@
+#include <bits/stdc++.h>
+
+void rotateMatrix(vector<vector<int>> &mat, int n, int m)
+{
+    int startRow = 0;
+    int endRow = n - 1;
+    int startCol = 0;
+    int endCol = m - 1;
+    while(startRow<endRow && startCol<endCol){
+        int prev=mat[startRow+1][startCol];
+        for (int j = startCol; j <= endCol; j++) {
+            int temp=mat[startRow][j];
+            mat[startRow][j]=prev;
+            prev=temp;
+        }
+        startRow++;
+        for(int i=startRow;i<=endRow;i++){
+            int temp=mat[i][endCol];
+            mat[i][endCol]=prev;
+            prev=temp;
+        }
+        endCol--;
+        
+        // Shift elements in the bottom row to the left
+        if (startRow <= endRow) {
+            for (int j = endCol; j >= startCol; j--) {
+                int temp = mat[endRow][j];
+                mat[endRow][j] = prev;
+                prev = temp;
+            }
+        }
+        endRow--;
+
+        // Shift elements in the leftmost column upward
+        if (startCol <= endCol) {
+            for (int i = endRow; i >= startRow; i--) {
+                int temp = mat[i][startCol];
+                mat[i][startCol] = prev;
+                prev = temp;
+            }
+        }
+        startCol++;
+    }
+}
