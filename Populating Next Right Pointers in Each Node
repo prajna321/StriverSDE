@@ -1,0 +1,30 @@
+class Solution {
+public:
+    Node* connect(Node* root) {
+        if (!root) {
+            return NULL;
+        }
+        
+        Node* curr = root;
+        while (curr->left) {
+            Node* temp = curr;
+             //we will need curr later so do not modify
+            while (curr) {
+                curr->left->next = curr->right;
+                
+                if (curr->next == NULL) {
+                    curr->right->next = NULL;
+                } 
+                else {
+                    curr->right->next = curr->next->left;
+                }
+                
+                curr = curr->next;
+            }
+            //here temp is used
+            curr = temp->left;
+        }
+        
+        return root;
+    }
+};
