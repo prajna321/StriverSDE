@@ -1,0 +1,19 @@
+class Solution {
+public:
+    TreeNode* f(vector<int>& nums,int l,int r){
+        if(l>r){
+            return NULL;
+        }
+        int m=l+(r-l)/2;
+        TreeNode* head=new TreeNode(nums[m]);
+        head->left=f(nums,l,m-1);
+        head->right=f(nums,m+1,r);
+        return head;
+    }
+
+    TreeNode* sortedArrayToBST(vector<int>& nums) {
+        int l=0,r=nums.size()-1;
+        return f(nums,l,r);
+    }
+};
+Console
