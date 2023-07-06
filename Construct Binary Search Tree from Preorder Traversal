@@ -1,0 +1,71 @@
+/**
+TC:O(NlogN)+O(N)
+   sort preorder+construct bst from inorder and preorder
+SC:O(N) stores inorder
+ */
+class Solution {
+public:
+    TreeNode* f(vector<int>& preorder,int preS,int preE,vector<int>& inorder,int inS,int inE){
+        if(preS>preE || inS>inE){
+            return NULL;
+        }
+        TreeNode* head=new TreeNode(preorder[preS]);
+        int posin=-1;
+        for(int i=0;i<inorder.size();i++){
+            if(inorder[i]==preorder[preS]){
+                posin=i;
+                break;
+            }
+        }
+        int leftsubtree=posin-inS;
+        head->left=f(preorder,preS+1,preS+leftsubtree,inorder,inS,posin-1);
+        head->right=f(preorder,preS+leftsubtree+1,preE,inorder,posin+1,inE);
+        return head;
+    }
+
+    TreeNode* bstFromPreorder(vector<int>& preorder) {
+        vector<int> inorder=preorder;
+        sort(inorder.begin(),inorder.end());
+        int preS=0,preE=preorder.size()-1;
+        int inS=0,inE=inorder.size()-1;
+        return f(preorder,preS,preE,inorder,inS,inE);
+    }
+};
+
+//TC:O(3N)==O(N)
+SC:O(1)
+
+class Solution {
+public:
+    TreeNode* f(vector<int>& preorder,int& i,int ub){
+        if(i>=preorder.size() || preorder[i]>ub){
+            return NULL;
+        }
+        TreeNode* head=new TreeNode(preorder[i]);
+        i++;
+        head->left=f(preorder,i,head->val);
+        head->right=f(preorder,i,ub);
+        return head;
+    }
+
+    TreeNode* bstFromPreorder(vector<int>& preorder) {
+        int i=0;
+        int ub=INT_MAX;
+        return f(preorder,i,ub);
+    }
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
