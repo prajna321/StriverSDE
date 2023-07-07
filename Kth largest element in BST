@@ -1,0 +1,20 @@
+class Solution
+{
+    public:
+    int kthLargest(Node *root, int& K)
+    {
+        if(!root){
+            return -1;
+        }
+        int rightans=kthLargest(root->right,K);
+        if(rightans!=-1){
+            return rightans;
+        }
+        K--;
+        if(K==0){
+            return root->data;
+        }
+        int leftans=kthLargest(root->left,K);
+        return leftans;
+    }
+};
