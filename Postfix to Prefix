@@ -1,0 +1,21 @@
+class Solution {
+  public:
+    string postToPre(string s) {
+        string ans="";
+        stack<string> st;
+        int n=s.size();
+        for(int i=0;i<n;i++){
+            if(s[i]!='+' && s[i]!='-' && s[i]!='*' && s[i]!='/' && s[i]!='^'){
+                string temp(1,s[i]);
+                st.push(temp);
+            }
+            else{
+                string a=st.top();st.pop();
+                string b=st.top();st.pop();
+                string temp=s[i]+b+a;
+                st.push(temp);
+            }
+        }
+        return st.top();
+    }
+};
