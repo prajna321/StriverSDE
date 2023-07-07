@@ -1,0 +1,55 @@
+/**
+TC:O(n)+O(n)
+SC:O(n)
+ */
+class Solution {
+public:
+    void f(vector<int>& inorder,TreeNode* root){
+        if(!root){
+            return;
+        }
+        f(inorder,root->left);
+        inorder.push_back(root->val);
+        f(inorder,root->right);
+    }
+
+    bool findTarget(TreeNode* root, int k) {
+        vector<int> inorder;
+        f(inorder,root);
+        int low=0,high=inorder.size()-1;
+        while(low<high){
+            //not low<=end 
+            int sum=inorder[low]+inorder[high];
+            if(sum==k){
+                return true;
+            }
+            if(sum<k){
+                low++;
+            }
+            else{
+                high--;
+            }
+        }
+        return false;
+    }
+};
+
+//the time complexity of the dfs function is O(N), where N is the number of nodes in the tree.
+// the space complexity of the dfs function is O(N).
+class Solution {
+public:
+    bool dfs(TreeNode* root, int k,unordered_set<int>& st){
+        if(!root){
+            return false;
+        }
+        if(st.find(k-root->val)!=st.end()){
+            return true;
+        }
+        st.insert(root->val);
+        return dfs(root->left,k,st) || dfs(root->right,k,st);
+    }
+    bool findTarget(TreeNode* root, int k) {
+        unordered_set<int> st;
+        return dfs(root,k,st);
+    }
+};
