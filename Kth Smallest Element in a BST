@@ -1,0 +1,90 @@
+/**
+recursive approach
+TC:O(n)+O(n)
+SC:O(N)
+ */
+class Solution {
+public:
+    int f(TreeNode* root, int k,int& cnt,int& ans){
+        if(!root){
+            return -1;
+        }
+        f(root->left,k,cnt,ans);
+        cnt++;
+        if(cnt==k){
+            ans= root->val;
+            return ans;
+        }
+        f(root->right,k,cnt,ans);
+        return ans;
+    } 
+
+    int kthSmallest(TreeNode* root, int k) {
+        int cnt=0;
+        int ans=-1;
+        return f(root,k,cnt,ans);
+    }
+};
+
+/**
+iterative approach
+TC:O(n)+O(n)
+SC:O(N)
+ */
+
+class Solution {
+public:
+    int kthSmallest(TreeNode* root, int k) {
+        stack<TreeNode*> st;
+        TreeNode* curr=root;
+        int cnt=0;
+        int ans=-1;
+        while(curr || !st.empty()){
+            if(curr){
+                st.push(curr);
+                curr=curr->left;
+            }
+            else{
+                curr=st.top();
+                st.pop();
+                cnt++;
+                if(cnt==k){
+                    ans=curr->val;
+                    break;
+                }
+                curr=curr->right;
+            }
+        }
+        return ans;
+    }
+};
+
+//MORRIS TRAVERSAL LEFT TO BE DONE
+
+
+//another approach
+Time Complexity: O(min(K,N))
+Space Complexity: O(min(K,N))
+class Solution {
+public:
+    int kthSmallest(TreeNode* root, int &k) {
+        if(root==NULL){
+            return -1;
+        }
+        //L
+        int leftAns=kthSmallest(root->left,k);
+        if(leftAns!=-1){
+            return leftAns;
+        }
+        //N
+        k--;
+        if(k==0){
+            return root->val;
+        }
+        //R
+        int rightAns=kthSmallest(root->right,k);
+        // if(rightAns!=-1){ it will anyways be the only case
+        return rightAns;
+        // }
+    }
+};
