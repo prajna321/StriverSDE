@@ -1,0 +1,65 @@
+/*
+TC:O(1)
+SC:O(N)
+ */
+class BSTIterator {
+public:
+    vector <int> inorderVec;
+
+    void inorder(TreeNode* root){
+        if(!root){
+            return;
+        }
+        inorder(root->left);
+        inorderVec.push_back(root->val);
+        inorder(root->right);
+    }
+
+    BSTIterator(TreeNode* root) {
+        inorder(root);
+    }
+    int index=0;
+    int next() {
+        return inorderVec[index++];
+    }
+    
+    bool hasNext() {
+        return index<inorderVec.size();
+    }
+};
+
+/**
+TC:O(1)
+SC:O(H)
+ */
+class BSTIterator {
+    stack<TreeNode*> st;
+public:
+    void pushAllLeft(TreeNode* root){
+        while(root){
+            st.push(root);
+            root=root->left;
+        }
+    }
+
+    BSTIterator(TreeNode* root) {
+        pushAllLeft(root);
+    }
+    
+    int next() {
+        TreeNode* tp=st.top();
+        st.pop();
+        if(tp->right){
+            pushAllLeft(tp->right);
+        }
+        return tp->val;
+    }
+    
+    bool hasNext() {
+        if(st.empty()){
+            return false;
+        }
+        return true;
+    }
+};
+
