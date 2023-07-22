@@ -1,0 +1,81 @@
+TC:O(n*k)_O(n)
+double findSmallestMaxDist(vector<int> &stations, int K){
+      int n=stations.size();
+      vector<int> howmany(n-1,0);
+      while(K--){
+          double maxLen=-1e8,maxindex=-1;
+          for(int i=0;i<stations.size()-1;i++){
+              int dist=stations[i+1]-stations[i];
+              double secLen=(double)dist/(double)(howmany[i]+1);
+              if(secLen>maxLen){
+                  maxLen=secLen;
+                  maxindex=i;
+              }
+          }
+          howmany[maxindex]++;
+      }
+      double ans=-1e8;
+      for(int i=0;i<stations.size()-1;i++){
+          int dist=stations[i+1]-stations[i];
+          double secLen=(double)dist/(double)(howmany[i]+1);
+          ans=max(ans,secLen);
+      }
+      return ans;
+    }
+
+//better
+//tc:n log n+klogn
+sc:n-1
+double findSmallestMaxDist(vector<int> &stations, int K){
+      int n=stations.size();
+      vector<int> howmany(n-1,0);
+      priority_queue<pair<double,int>> pq;
+      for(int i=0;i<n-1;i++){
+          pq.push({stations[i+1]-stations[i],i});
+      }
+      while(K--){
+          auto tp=pq.top();pq.pop();
+          int secInd=tp.second;
+          howmany[secInd]++;
+          double initialDiff=stations[secInd+1]-stations[secInd];
+          double newSecLen=initialDiff/(double)(howmany[secInd]+1);
+          pq.push({newSecLen,secInd});
+      }
+      return pq.top().first;
+    }
+
+//optimised
+
+When we use binary search to find a specific target value, we typically have a defined range (lower and upper bounds) where the target value can exist. We keep narrowing down the search space by setting either left = mid + 1 (when the target is to the right of the mid) or right = mid - 1 (when the target is to the left of the mid) until we find the target value or determine that it doesn't exist in the range.
+
+However, in this gas station distribution problem, we are not looking for a specific target value; instead, we are searching for the minimum maximum section length, which might not be an actual section length present in the input array. Therefore, setting right = mid - 1 would be inappropriate because it may cause us to skip over the actual minimum maximum section length value.
+
+By sticking to the approach right = mid, we ensure that the target value (the minimum maximum section length) is not excluded from consideration in the binary search process. This approach guarantees that we will eventually converge to the correct minimum maximum section length within the specified precision, regardless of whether it is an actual section length in the input or not.
+
+
+bool isPos(vector<int> &arr, int k,double mid){
+        int cnt=0;
+        for(int i=1;i<arr.size();i++){
+            int secDist=(arr[i]-arr[i-1]);
+            cnt += ceil (secDist/mid) - 1;
+        }
+        return cnt<=k;
+    }
+  
+    double findSmallestMaxDist(vector<int> &arr, int k){
+      int n=arr.size();
+      double low=0,high= arr[n - 1] - arr[0];
+      
+      double ans=-1;
+      while(high-low>1e-6){
+          double mid=low+(high-low)/2.0;
+          if(isPos(arr,k,mid)){
+              ans=mid;
+              high=mid;
+          }
+          else{
+              low=mid;
+          }
+      }
+      return ans;
+    }
