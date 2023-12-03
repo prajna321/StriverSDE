@@ -1,0 +1,87 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+class segTree{
+    vector<int> tree,lazy;
+    public:
+    segTree(int n){
+        tree.resize(4*n);
+        lazy.resize(4*n);
+    }
+    void build(int node,int low,int high){
+        if(low==high){
+            tree[node]=0;
+            return;
+        }
+        int mid=(low+high)/2;
+        build(2*node+1,low,mid);
+        build(2*node+2,mid+1,high);
+        tree[node]=tree[2*node+1]+tree[2*node+2];
+    }
+    void rangeUpdate(int node, int start, int end, int l, int r){
+        if(lazy[node]!=0){
+            tree[node]=(end-start+1)-tree[node];
+            if(start!=end){
+                lazy[2*node+1]=1-lazy[2*node+1];
+                lazy[2*node+2]=1-lazy[2*node+2];
+            }
+            lazy[node]=0;
+        }
+        if(start>r || end<l || start>end){
+            return;
+        }
+        if(start>=l && end<=r){
+            tree[node]=(end-start+1)-tree[node];
+            if(start!=end){
+                lazy[2*node+1]=1-lazy[2*node+1];
+                lazy[2*node+2]=1-lazy[2*node+2];
+            }
+            return;
+        }
+        int mid=(start+end)/2;
+        rangeUpdate(2*node+1,start,mid,l,r);
+        rangeUpdate(2*node+2,mid+1,end,l,r);
+        tree[node]=tree[2*node+1]+tree[2*node+2];
+    }
+    void rangeUpdate(int l,int r){
+        rangeUpdate(0,0,tree.size()/4 - 1,l,r);
+    }
+    int query(int node,int start,int end,int l,int r){
+        if(lazy[node]!=0){
+            tree[node]=(end-start+1)-tree[node];
+            if(start!=end){
+                lazy[2*node+1]=1-lazy[2*node+1];
+                lazy[2*node+2]=1-lazy[2*node+2];
+            }
+            lazy[node]=0;
+        }
+        if(start>r || end<l || start>end){
+            return 0;
+        }
+        if(start>=l && end<=r){
+            return tree[node];
+        }
+        int mid=(start+end)/2;
+        int left=query(2*node+1,start,mid,l,r);
+        int right=query(2*node+2,mid+1,end,l,r);
+        return left+right;
+    }
+    int query(int l,int r){
+        return query(0,0,tree.size()/4 - 1,l,r);
+    }
+};
+
+int main() {
+    int n,q;cin>>n>>q;
+    segTree st(n);
+    while(q--){
+        int type,a,b;cin>>type>>a>>b;
+        if(type==0){
+            st.rangeUpdate(a,b);
+        }
+        else{
+            cout<<st.query(a,b)<<endl;
+        }
+    }
+	return 0;
+}
